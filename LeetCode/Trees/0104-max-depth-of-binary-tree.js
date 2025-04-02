@@ -11,8 +11,30 @@
 	@return {number}
  */
 
-var maxDepthRecursive = function (root) {
+var maxDepth = function (root) {
+    return dfs(root, 0);
+
+    function dfs(node, depth) {
+        if (!node) return depth;
+
+        return Math.max(dfs(node.left, depth + 1), dfs(node.right, depth + 1));
+    }
+};
+
+var maxDepthIterative = function (root) {
     if (!root) return 0;
 
-    return 1 + Math.max(maxDepthDFS(root.left), maxDepthDFS(root.right));
+    let stack = [[root, 1]],
+        maxDepth = 0;
+
+    while (stack.length) {
+        let [node, depth] = stack.pop();
+
+        maxDepth = Math.max(maxDepth, depth);
+
+        node.left && stack.push([node.left, depth + 1]);
+        node.right && stack.push([node.right, depth + 1]);
+    }
+
+    return maxDepth;
 };

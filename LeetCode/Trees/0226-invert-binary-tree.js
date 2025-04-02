@@ -10,7 +10,7 @@
 	@return {TreeNode}
  */
 
-var invertTreeRecursive = function (root) {
+var invertTreeRecursive1 = function (root) {
     return dfs(root);
 
     function dfs(node) {
@@ -20,6 +20,18 @@ var invertTreeRecursive = function (root) {
 
         dfs(node.left);
         dfs(node.right);
+
+        return node;
+    }
+};
+
+var invertTreeRecursive2 = function (root) {
+    return invert(root);
+
+    function invert(node) {
+        if (!node) return null;
+
+        [node.left, node.right] = [invert(node.right), invert(node.left)];
 
         return node;
     }
