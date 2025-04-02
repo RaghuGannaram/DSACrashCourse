@@ -112,4 +112,22 @@ var groupAnagrams4 = function (strs) {
     return Array.from(map, ([key, value]) => value);
 };
 
+var groupAnagrams5 = function (strs) {
+    let keyStr,
+        keyArr,
+        map = new Map();
+
+    for (let str of strs) {
+        keyArr = new Array(26).fill(0);
+
+        for (let ch of str) {
+            keyArr[ch.charCodeAt(0) - 97] += 1;
+        }
+        keyStr = keyArr.join(",");
+        map.set(keyStr, [...(map.get(keyStr) ?? []), str]);
+    }
+
+    return Array.from(map.values());
+};
+
 console.log(groupAnagrams4(["eat", "tea", "tan", "ate", "nat", "bat"]));
