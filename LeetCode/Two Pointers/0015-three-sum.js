@@ -30,6 +30,7 @@ var threeSum = function (nums) {
                 res.push([nums[i], nums[l], nums[r]]);
                 l++;
                 while (nums[l] === nums[l - 1] && l < r) l++;
+                continue;
             }
             sum > 0 ? r-- : l++;
         }
