@@ -24,5 +24,18 @@ var reverseList = function (head) {
     return prev;
 };
 
+var reverseList2 = function (head) {
+    return reverse(head, null);
+
+    function reverse(current, prev) {
+        if (!current) return prev;
+
+        const next = current.next;
+        current.next = prev;
+
+        return reverse(next, current);
+    }
+};
+
 let head = generateLinkedList([1, 2, 3, 4, 5]);
 console.log(reverseList(head));
