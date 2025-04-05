@@ -13,36 +13,34 @@
     @return {number}
  */
 
+// Approach 1: Recursion with DFS
 var findTargetSumWays1 = function (nums, target) {
-    return backtrack(0, 0);
+    return dfs(0, 0);
 
-    function backtrack(sum, i) {
-        if (i === nums.length) {
-            if (sum === target) return 1;
-            else return 0;
-        }
+    function dfs(i, sum) {
+        if (i === nums.length) return sum === target ? 1 : 0;
 
-        return backtrack(sum + nums[i], i + 1) + backtrack(sum - nums[i], i + 1);
+        return dfs(i + 1, sum + nums[i]) + dfs(i + 1, sum - nums[i]);
     }
 };
 
+// Approach 2: Recursion with Memoization
 var findTargetSumWays2 = function (nums, target) {
-    let dp = new Map();
+    const cache = new Map();
 
-    return backtrack(0, 0);
+    return dp(0, 0);
 
-    function backtrack(sum, i) {
-        if (dp.has(`${sum}-${i}`)) return dp.get(`${sum}-${i}`);
+    function dp(i, sum) {
+        if (i === nums.length) return sum === target ? 1 : 0;
 
-        if (i === nums.length) {
-            if (sum === target) return 1;
-            else return 0;
-        }
+        const key = `${i}-${sum}`;
 
-        let count = backtrack(sum + nums[i], i + 1) + backtrack(sum - nums[i], i + 1);
+        if (cache.has(key)) return cache.get(key);
 
-        dp.set(`${sum}-${i}`, count);
+        const computation = dp(i + 1, sum + nums[i]) + dp(i + 1, sum - nums[i]);
 
-        return count;
+        cache.set(key, computation);
+
+        return computation;
     }
 };

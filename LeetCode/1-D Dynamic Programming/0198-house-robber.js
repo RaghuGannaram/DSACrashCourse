@@ -14,19 +14,48 @@
     @return {number}
  */
 
-var rob = function (nums) {
-    if (nums.length === 1) return nums[0];
+//Approach 1: Recursion with Memoization
+var rob1 = function (nums) {
+    const cache = new Map();
 
-    let dp = new Array(nums.length);
+    return dp(0);
 
-    dp[0] = nums[0];
-    dp[1] = Math.max(nums[0], nums[1]);
+    function dp(i) {
+        if (i >= nums.length) return 0;
 
-    for (let i = 2; i < nums.length; i++) {
-        dp[i] = Math.max(nums[i] + dp[i - 2], dp[i - 1]);
+        if (cache.has(i)) return cache.get(i);
+
+        const computation = Math.max(nums[i] + dp(i + 2), dp(i + 1));
+
+        cache.set(i, computation);
+
+        return computation;
     }
-
-    return dp.at(-1);
 };
 
-let x = {a:1};
+//Approach 2: Iteration with Tabulation
+var rob2 = function (nums) {
+    const dp = new Array(nums.length);
+
+    for (let i = 0; i < nums.length; i++) {
+        dp[i] = Math.max((dp[i - 2] ?? 0) + nums[i], dp[i - 1] ?? 0);
+    }
+
+    return dp[nums.length - 1];
+};
+
+//Approach 3: Iteration with Space Optimization
+var rob3 = function (nums) {
+    let secondLast, last, current;
+
+    secondLast = nums[0];
+    last = Math.max(nums[0], nums[1] ?? 0);
+
+    for (let i = 2; i < nums.length; i++) {
+        current = Math.max(secondLast + nums[i], last);
+        secondLast = last;
+        last = current;
+    }
+
+    return last;
+};

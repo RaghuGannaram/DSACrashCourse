@@ -16,9 +16,30 @@
     @return {number}
  */
 
-// Bottom up iterative approach 
-var climbStairsIterative = function (n) {
-    let dp = new Array(n);
+//Approach 1: Recursion with Memoization
+var climbStairs1 = function (n) {
+    const cache = new Map();
+
+    return dp(n);
+
+    function dp(s) {
+        if (s <= 1) return 1;
+
+        if (cache.has(s)) return cache.get(s);
+
+        const computation = dp(s - 1) + dp(s - 2);
+
+        cache.set(s, computation);
+
+        return computation;
+    }
+};
+
+//Approach 2: Iteration with Tabulation
+var climbStairs2 = function (n) {
+    if (n <= 1) return 1;
+
+    const dp = new Array(n);
 
     dp[0] = 1;
     dp[1] = 2;
@@ -30,16 +51,17 @@ var climbStairsIterative = function (n) {
     return dp[n - 1];
 };
 
-// Top down recursive approach
-var climbStairsRecursive = function (n, memo = new Map()) {
-    if (n <= 1) return 1;
-    if (n === 2) return 2;
+//Approach 3: Iteration with Space Optimization
+var climbStairs3 = function (n) {
+    if (n <= 2) return n;
 
-    if (memo.has(n)) return memo.get(n);
+    let secondLast = 1, last = 2, current;
 
-    let result = climbStairs(n - 1, memo) + climbStairs(n - 2, memo);
+    for (let i = 0; i < n - 2; i++) {
+        current = secondLast + last;
+        secondLast = last;
+        last = current;
+    }
 
-    memo.set(n, result);
-
-    return result;
+    return current;
 };
