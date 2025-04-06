@@ -12,7 +12,34 @@
     @return {number}
  */
 
-var coinChange = function (coins, amount) {
+//Approach 1: Recursion with Memoization
+var coinChange1 = function (coins, amount) {
+    const cache = new Map();
+
+    const coinsRequired = dp(amount);
+
+    return coinsRequired === Number.MAX_SAFE_INTEGER ? -1 : coinsRequired;
+
+    function dp(due) {
+        if (due < 0) return Number.MAX_SAFE_INTEGER;
+        if (due === 0) return 0;
+
+        if (cache.has(due)) return cache.get(due);
+
+        const computation = Math.min(
+            ...coins.map((coin) => {
+                const sub = dp(due - coin);
+                return sub === Number.MAX_SAFE_INTEGER ? sub : sub + 1;
+            })
+        );
+
+        cache.set(due, computation);
+
+        return computation;
+    }
+};
+
+var coinChange2 = function (coins, amount) {
     const dp = new Array(amount + 1).fill(Number.MAX_SAFE_INTEGER);
 
     dp[0] = 0;
