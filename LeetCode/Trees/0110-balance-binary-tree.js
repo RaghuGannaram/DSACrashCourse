@@ -12,7 +12,7 @@
 	@return {boolean}
  */
 
-var isBalanced = function (root) {
+var isBalanced1 = function (root) {
     const result = dfs(root);
 
     return result.balanced;
@@ -27,5 +27,25 @@ var isBalanced = function (root) {
         const balanced = Math.abs(leftTree.height - rightTree.height) <= 1 && leftTree.balanced && rightTree.balanced;
 
         return { height, balanced };
+    }
+};
+
+var isBalanced2 = function (root) {
+    const res = dfs(root);
+
+    return res.balanced;
+
+    function dfs(node) {
+        if (!node) {
+            return { height: 0, balanced: true };
+        }
+
+        const left = dfs(node.left);
+        const right = dfs(node.right);
+
+        return {
+            height: 1 + Math.max(left.height, right.height),
+            balanced: left.balanced && right.balanced && Math.abs(left.height - right.height) <= 1,
+        };
     }
 };

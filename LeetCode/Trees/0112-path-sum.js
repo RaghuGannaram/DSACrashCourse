@@ -13,7 +13,7 @@
     @return {boolean}
  */
 
-var hasPathSum = function (root, targetSum) {
+var hasPathSum1 = function (root, targetSum) {
     return dfs(root, targetSum);
 
     function dfs(node, remainder) {
@@ -22,5 +22,18 @@ var hasPathSum = function (root, targetSum) {
         if (!node.left && !node.right) return remainder === node.val;
 
         return dfs(node.left, remainder - node.val) || dfs(node.right, remainder - node.val);
+    }
+};
+
+var hasPathSum2 = function (root, targetSum) {
+
+    return dfs(root, 0);
+
+    function dfs(node, sum) {
+        if (!node) return false;
+
+        if (!node.left && !node.right) return node.val + sum === targetSum;
+
+        return dfs(node.left, node.val + sum) || dfs(node.right, node.val + sum);
     }
 };

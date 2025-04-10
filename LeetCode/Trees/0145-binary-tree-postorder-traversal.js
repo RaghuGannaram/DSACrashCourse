@@ -31,16 +31,17 @@ var postOrderTraversalIterative = function (root) {
         current,
         stack = [];
 
+    if(!root) return res;
     stack.push(root);
 
     while (stack.length > 0) {
         current = stack.pop();
 
-        res.unshift(current.val);
+        res.push(current.val);
 
         current.left && stack.push(current.left);
         current.right && stack.push(current.right);
     }
 
-    return res;
+    return res.reverse();
 };

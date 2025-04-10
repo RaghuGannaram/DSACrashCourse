@@ -31,6 +31,7 @@ var preOrderTraversalIterative = function (root) {
         current,
         stack = [];
 
+    if (!root) return res;
     stack.push(root);
 
     while (stack.length > 0) {
