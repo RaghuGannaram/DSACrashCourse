@@ -17,15 +17,15 @@ var minWindow = function (s, t) {
     let l = 0,
         r = 0,
         start = 0,
-        map = {},
+        map = new Map(),
         count = t.length,
         min = Number.MAX_SAFE_INTEGER;
 
-    t.split("").forEach((c) => (map[c] = (map[c] ?? 0) + 1));
+    t.split("").forEach((ch) => map.set(ch, (map.get(ch) ?? 0) + 1));
 
     while (r < s.length) {
-        if (map[s[r]] > 0) count--;
-        map[s[r]]--;
+        if (map.get(s[r]) > 0) count--;
+        map.set(s[r], map.get(s[r]) - 1);
         r++;
 
         while (count === 0) {
@@ -34,8 +34,8 @@ var minWindow = function (s, t) {
                 start = l;
             }
 
-            if (map[s[l]] === 0) count++;
-            map[s[l]]++;
+            if (map.get(s[l]) === 0) count++;
+            map.set(s[l], map.get(s[l]) + 1);
             l++;
         }
     }
