@@ -130,4 +130,25 @@ var groupAnagrams5 = function (strs) {
     return Array.from(map.values());
 };
 
-console.log(groupAnagrams4(["eat", "tea", "tan", "ate", "nat", "bat"]));
+var groupAnagrams6 = function (strs) {
+    let keyArr,
+        keyStr,
+        map = new Map();
+
+    for (let str of strs) {
+        keyArr = new Array();
+
+        for (let ch of str) {
+            keyArr[ch.charCodeAt(0)] = (keyArr[ch.charCodeAt(0)] ?? 0) + 1;
+        }
+        keyStr = keyArr.join(",");
+
+        map.set(keyStr, [...(map.get(keyStr) ?? []), str]);
+    }
+    
+    console.log(Array.from(map.keys())[0].length);
+    return Array.from(map.values());
+};
+
+console.log(groupAnagrams5(["eat", "tea", "tan", "ate", "nat", "bat"]));
+console.log(groupAnagrams6(["ddddddddddg", "dgggggggggg"]));

@@ -35,22 +35,27 @@ var encode = function (strs) {
     return strs.map((str) => `${str.length}#${str}`).join("");
 };
 
-var decode = function (str) {
+var decode = function (s) {
+    const res = [];
+
     let i = 0,
-        result = [];
+        start,
+        hash,
+        len;
 
-    while (i < str.length) {
-        let j = i;
-        while (str[j] !== "#") {
-            ++j;
-        }
+    while (i < s.length) {
+        hash = s.indexOf("#", i);
+        len = Number(s.slice(i, hash));
+        start = hash + 1;
 
-        const len = Number(str.slice(i, j));
-        result.push(str.slice(++j, j + len));
-        i = j + len;
+        res.push(s.slice(start, start + len));
+
+        i = start + len;
     }
 
-    return result;
+    return res;
 };
+
 console.log(encode(["abc", "def"]));
+
 console.log(decode("3#abc3#def"));

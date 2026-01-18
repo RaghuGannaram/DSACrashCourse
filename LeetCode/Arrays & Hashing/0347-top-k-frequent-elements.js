@@ -48,4 +48,17 @@ var topKFrequent2 = function (nums, k) {
         .map((x) => x[0]);
 };
 
+var topKFrequent3 = function (nums, k) {
+    const map = new Map();
+
+    for (let num of nums) {
+        map.set(num, (map.get(num) ?? 0) + 1);
+    }
+
+    return Array.from(map)
+        .sort(([n1, f1], [n2, f2]) => f2 - f1)
+        .slice(0, k)
+        .map(([n, f]) => n);
+};
+
 console.log(topKFrequent1([7, 1, 2, 7, 1, 3, 7, 4, 2, 7, 2], 2));

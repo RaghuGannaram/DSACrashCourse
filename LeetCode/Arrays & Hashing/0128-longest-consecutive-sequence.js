@@ -11,7 +11,7 @@
 	@return {number}
  */
 
-var longestConsecutive = function (nums) {
+var longestConsecutive1 = function (nums) {
 	let streak, res = 0, set = new Set(nums);
 
 	for (let n of nums) {
@@ -28,6 +28,24 @@ var longestConsecutive = function (nums) {
 	return res;
 };
 
+// Iterating 'nums' caused TLE because duplicate numbers triggered the while-loop multiple times; always iterate the 'set' to avoid this.
+var longestConsecutive2 = function (nums) {
+    let streak, res = 0, set = new Set(nums);
+
+    for (let n of set) {
+        if (set.has(n + 1)) continue;
+        streak = 0;
+
+        while (set.has(n - streak)) {
+            streak++;
+        }
+
+        res = Math.max(res, streak);
+    }
+
+    return res;
+};
+
 let nums = [100, 4, 200, 1, 3, 2];
 
-console.log(longestConsecutive(nums));
+console.log(longestConsecutive2(nums));
