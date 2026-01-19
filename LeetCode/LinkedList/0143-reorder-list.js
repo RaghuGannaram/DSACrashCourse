@@ -13,7 +13,58 @@
 	@return {void} Do not return anything, modify head in-place instead.
  */
 
-var reorderList = function (head) {
+var reorderList1 = function (head) {
+    let slow = head,
+        fast = head.next,
+        tail;
+
+    while (fast && fast.next) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    tail = reverse(slow.next);
+    slow.next = null;
+
+    return merge(head, tail);
+
+    function reverse(head) {
+        let prev = null,
+            current = head,
+            next;
+
+        while (current) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        return prev;
+    }
+
+    function merge(list1, list2) {
+        let p1 = list1,
+            p2 = list2,
+            t1,
+            t2;
+
+        while (p2) {
+            t1 = p1.next;
+            t2 = p2.next;
+
+            p1.next = p2;
+            p2.next = t1;
+
+            p1 = t1;
+            p2 = t2;
+        }
+
+        return list1;
+    }
+};
+
+var reorderList2 = function (head) {
     let slow = head,
         fast = head,
         tail;
@@ -42,16 +93,14 @@ var reorderList = function (head) {
     }
 
     function reverse(head) {
-        let prev = null,
-            next;
+        return reverseHelper(head, null);
 
-        while (head) {
-            next = head.next;
-            head.next = prev;
-            prev = head;
-            head = next;
+        function reverseHelper(current, prev) {
+            if (!current) return prev;
+            const next = current.next;
+            current.next = prev;
+
+            return reverseHelper(next, current);
         }
-
-        return prev;
     }
 };
