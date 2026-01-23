@@ -13,75 +13,81 @@
  */
 
 var numIslands1 = function (grid) {
-	let res = 0, m = grid.length, n = grid[0].length, visited = new Set();
+    let res = 0,
+        m = grid.length,
+        n = grid[0].length,
+        visited = new Set();
 
-	for (let i = 0; i < m; i++) {
-		for (let j = 0; j < n; j++) {
-			if (grid[i][j] === "1" && !visited.has(`${i}-${j}`)) {
-				res++;
-				dfs(i, j);
-			}
-		}
-	}
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (grid[i][j] === "1" && !visited.has(`${i}-${j}`)) {
+                res++;
+                dfs(i, j);
+            }
+        }
+    }
 
-	return res;
+    return res;
 
-	function dfs(i, j) {
-		if (i < 0 || i >= m || j < 0 || j >= n || visited.has(`${i}-${j}`) || grid[i][j] === "0") return;
+    function dfs(i, j) {
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] === "0" || visited.has(`${i}-${j}`)) return;
 
-		visited.add(`${i}-${j}`);
+        visited.add(`${i}-${j}`);
 
-		dfs(i + 1, j);
-		dfs(i - 1, j);
-		dfs(i, j + 1);
-		dfs(i, j - 1);
-	}
+        dfs(i + 1, j);
+        dfs(i - 1, j);
+        dfs(i, j + 1);
+        dfs(i, j - 1);
+    }
 };
 
-
 var numIslands2 = function (grid) {
-	let res = 0, m = grid.length, n = grid[0].length, visited = new Set();
+    let res = 0,
+        m = grid.length,
+        n = grid[0].length,
+        visited = new Set();
 
-	for (let i = 0; i < m; i++) {
-		for (let j = 0; j < n; j++) {
-			if (grid[i][j] === "1" && !visited.has(`${i}-${j}`)) {
-				res++;
-				bfs(i, j);
-			}
-		}
-	}
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (grid[i][j] === "1" && !visited.has(`${i}-${j}`)) {
+                res++;
+                bfs(i, j);
+            }
+        }
+    }
 
-	return res;
+    return res;
 
-	function bfs(i, j) {
-		let l, queue = [];
-		queue.push([i, j]);
+    function bfs(i, j) {
+        let l,
+            queue = [];
 
+        queue.push([i, j]);
 
-		while (queue.length > 0) {
-			l = queue.length;
+        while (queue.length > 0) {
+            l = queue.length;
 
-			for (let i = 0; i < l; i++) {
-				let [x, y] = queue.shift();
+            for (let i = 0; i < l; i++) {
+                let [x, y] = queue.shift();
 
-				if (x < 0 || x >= m || y < 0 || y >= n || visited.has(`${x}-${y}`) || grid[x][y] === "0") continue;
+                if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] === "0" || visited.has(`${x}-${y}`)) continue;
 
-				visited.add(`${x}-${y}`);
+                visited.add(`${x}-${y}`);
 
-				queue.push([x + 1, y]);
-				queue.push([x - 1, y]);
-				queue.push([x, y + 1]);
-				queue.push([x, y - 1]);
-			}
-		}
-	}
+                queue.push([x + 1, y]);
+                queue.push([x - 1, y]);
+                queue.push([x, y + 1]);
+                queue.push([x, y - 1]);
+            }
+        }
+    }
 };
 
 let grid = [
-	["1", "1", "1", "1", "0"],
-	["1", "1", "0", "1", "0"],
-	["1", "1", "0", "0", "0"],
-	["0", "0", "0", "0", "0"]
+    ["1", "1", "1", "1", "0"],
+    ["1", "1", "0", "1", "0"],
+    ["1", "1", "0", "0", "0"],
+    ["0", "0", "0", "0", "0"],
 ];
 
-console.log(numIslands(grid));   // 1
+console.log(numIslands(grid)); // 1
