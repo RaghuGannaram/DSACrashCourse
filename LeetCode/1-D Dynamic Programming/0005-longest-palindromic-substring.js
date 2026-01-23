@@ -10,7 +10,9 @@
     @return {string}
  */
 
-var longestPalindrome = function (s) {
+
+//Approach 1: Expand Around Center
+var longestPalindrome1 = function (s) {
     let res = "";
 
     for (let l, r, i = 0; i < s.length; i++) {

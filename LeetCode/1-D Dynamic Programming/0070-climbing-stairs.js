@@ -37,7 +37,7 @@ var climbStairs1 = function (n) {
 
 //Approach 2: Iteration with Tabulation
 var climbStairs2 = function (n) {
-    if (n <= 1) return 1;
+    if (n <= 2) return n;
 
     const dp = new Array(n);
 
