@@ -19,15 +19,19 @@ e.next = null;
 
 function printLinkedList1(head) {
 	let current = head;
+
 	while (current !== null) {
 		console.log(current.val);
+
 		current = current.next;
 	}
 }
 
 function printLinkedList2(head) {
 	if (head === null) return;
+
 	console.log(head.val);
+
 	printLinkedList2(head.next);
 }
 
@@ -46,12 +50,16 @@ function copyToArray1(head) {
 
 function copyToArray2(head) {
 	let values = [];
+
 	fillArr(head, values);
+
 	return values;
 }
 function fillArr(head, values) {
 	if (head === null) return;
+
 	values.push(head.val);
+    
 	fillArr(head.next, values);
 }
 
