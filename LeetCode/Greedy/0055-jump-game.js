@@ -12,30 +12,20 @@
     @return {boolean}
  */
 
-var canJump1 = function (nums) {
-    const dp = new Array(nums.length).fill(0),
-        n = nums.length;
+var canJump = function (nums) {
+    let maxReachable = 0;
 
-    dp[0] = nums[0];
-
-    for (let i = 1; i < n; i++) {
-        if (dp[i - 1] < i) {
+    for (let i = 0; i < nums.length; i++) {
+        if (i > maxReachable) {
             return false;
         }
-        dp[i] = Math.max(dp[i - 1], i + nums[i]);
-    }
 
-    return dp[n - 1] >= n - 1;
-};
+        maxReachable = Math.max(maxReachable, i + nums[i]);
 
-var canJump2 = function (nums) {
-    let canReachFrom = nums.length - 1;
-
-    for (let i = nums.length - 2; i >= 0; i--) {
-        if (i + nums[i] >= canReachFrom) {
-            canReachFrom = i;
+        if (maxReachable >= nums.length - 1) {
+            return true;
         }
     }
 
-    return canReachFrom === 0;
+    return true;
 };
