@@ -39,10 +39,11 @@ var lengthOfLastWord2 = function (s) {
 
 var lengthOfLastWord3 = function (s) {
     let match = s.match(/(\w+)\s*$/);
+    console.log(match)
 
     return match[1] ? match[1].length : 0;
 };
 
-let s = "Hello World";
+let s = "Hello World hey  ";
 
-console.log(lengthOfLastWord1(s));
+console.log(lengthOfLastWord3(s));

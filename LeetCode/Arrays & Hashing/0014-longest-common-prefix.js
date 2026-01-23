@@ -12,10 +12,11 @@
  */
 
 var longestCommonPrefix1 = function (strs) {
-    let res = "", test = strs[0];
+    let res = "",
+        test = strs[0];
 
     for (let i = 0; i < test.length; i++) {
-        if (strs.every(str => str[i] === test[i])) res += test[i];
+        if (strs.every((str) => str[i] === test[i])) res += test[i];
         else break;
     }
 
@@ -23,14 +24,31 @@ var longestCommonPrefix1 = function (strs) {
 };
 
 var longestCommonPrefix2 = function (strs) {
-    let i = 0, test = strs[0];
+    let i = 0,
+        test = strs[0];
 
     while (true) {
-        if (!strs.every(str => str[i] === test[i]) || !test[i]) break;
-        i++
+        if (!strs.every((str) => str[i] === test[i]) || !test[i]) break;
+        i++;
     }
 
     return test.slice(0, i);
+};
+
+var longestCommonPrefix3 = function (strs) {
+    let res = 0,
+        test = strs[0];
+
+    outer: for (let i = 0; i < test.length; i++) {
+        inner: for (let j = 0; j < strs.length; j++) {
+            if (test[i] !== strs[j][i]) {
+                break outer;
+            }
+        }
+        res = i + 1;
+    }
+
+    return test.slice(0, res);
 };
 
 let strs = ["flower", "flow", "flight"];
