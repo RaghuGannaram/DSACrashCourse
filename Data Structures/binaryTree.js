@@ -22,12 +22,11 @@ console.log(apple);
 console.log(typeof apple);
 console.log(apple instanceof Node);
 
-//------------BFS | Level Order Traversal| Time Complexity = O(n) | Space COmplexity = O(n)-----------------------------------
+//------------BFS | Level Order Traversal| Time Complexity = O(n) | Space Complexity = O(n)-----------------------------------
 function levelOrderTraversal(root) {
     let current,
-        result = [],
         queue = [],
-        count = 0;
+        result = [];
 
     if (!root) {
         return result;
@@ -36,38 +35,40 @@ function levelOrderTraversal(root) {
     queue.push(root);
 
     while (queue.length > 0) {
-        ++count;
         current = queue.shift();
+
         result.push(current.val);
+
         current.left !== null && queue.push(current.left);
         current.right !== null && queue.push(current.right);
     }
-    console.log(count);
     return result;
 }
 
 console.log(levelOrderTraversal(apple));
 
 //-------------------------------------------------PreOrder Traversal----------------------------------------------
-function preOrderTraversalDFS(root) {
+function travelPreOrderDFS(root) {
     let result = [];
 
     dfs(root);
+
     return result;
 
     function dfs(node) {
         if (!node) return;
 
         result.push(node.val);
+
         dfs(node.left);
         dfs(node.right);
     }
 }
 
-function preOrderTraversalBFS(root) {
+function travelPreOrderBFS(root) {
     let current = null,
-        result = [],
-        stack = [];
+        stack = [],
+        result = [];
 
     if (!root) return result;
 
@@ -92,10 +93,10 @@ function preOrderTraversalBFS(root) {
 
 //10 20 40 50 30 60 70
 
-console.log(preOrderTraversalDFS(apple));
-console.log(preOrderTraversalBFS(apple));
+console.log(travelPreOrderDFS(apple));
+console.log(travelPreOrderBFS(apple));
 
-function preOrderTraversalforRegeneration(root) {
+function serializePreOrderDFS(root) {
     let result = [];
 
     dfs(root);
@@ -113,39 +114,67 @@ function preOrderTraversalforRegeneration(root) {
     }
 }
 
-console.log(preOrderTraversalforRegeneration(apple));
+function serializePreOrderBFS(root) {
+    let current = null,
+        stack = [],
+        result = [];
 
-function constructBinaryTreeFromPreOrderArray(arr) {
-    let index = 0;
+    if (!root) return result;
 
-    return constructTree(arr);
+    stack.push(root);
 
-    function constructTree(arr) {
-        if (index >= arr.length || arr[index] === null) {
-            index++;
+    while (stack.length > 0) {
+        current = stack.pop();
+
+        result.push(current?.val ?? null);
+
+        current && stack.push(current.right);
+        current && stack.push(current.left);
+    }
+    return result;
+}
+
+console.log(serializePreOrderDFS(apple));
+
+function deserializePreOrder(arr) {
+    let current,
+        index = 0;
+
+    return construct();
+
+    function construct() {
+        if (arr.length <= index) {
             return null;
         }
 
-        let node = new Node(arr[index]);
+        current = arr[index];
         index++;
-        node.left = constructTree(arr);
-        node.right = constructTree(arr);
+
+        if (current === null) {
+            return null;
+        }
+
+        let node = new Node(current);
+
+        node.left = construct();
+        node.right = construct();
 
         return node;
     }
 }
-const preorderedArray = [10, 20, 40, null, null, 50, null, null, 30, 60, null, null, 70, null, null];
-const constructedPreorderTree = constructBinaryTreeFromPreOrderArray(preorderedArray);
+const preorderedArray = serializePreOrderDFS(apple);
+const constructedPreorderTree = deserializePreOrder(preorderedArray);
 
+console.log(preorderedArray);
 console.log(constructedPreorderTree);
-console.log(preOrderTraversalforRegeneration(constructedPreorderTree));
 
 //-------------------------------------------------InOrder Traversal----------------------------------------------
 
-function inOrderTraversalDFS(root) {
+function travelInOrderDFS(root) {
     let result = [];
 
     dfs(root);
+
     return result;
 
     function dfs(node) {
@@ -157,10 +186,10 @@ function inOrderTraversalDFS(root) {
     }
 }
 
-function inOrderTraversalBFS(root) {
-    let result = [],
-        current,
-        stack = [];
+function travelInOrderBFS(root) {
+    let current,
+        stack = [],
+        result = [];
 
     current = root;
 
@@ -186,39 +215,39 @@ function inOrderTraversalBFS(root) {
 
 // 40 20 50 10 60 30 70
 
-console.log(inOrderTraversalDFS(apple));
-console.log(inOrderTraversalBFS(apple));
+console.log(travelInOrderDFS(apple));
+console.log(travelInOrderBFS(apple));
 
-function constructBinaryTreeFromInOrderArray(inOrderArr) {
-    let index = 0;
+function deserializeInOrder(arr) {
+    return construct(0, arr.length - 1);
 
-    function constructTree(start, end) {
+    function construct(start, end) {
         if (start > end) {
             return null;
         }
 
         let mid = Math.floor((start + end) / 2);
-        let node = new Node(inOrderArr[mid]);
-        index++;
+        
+        let node = new Node(arr[mid]);
 
-        node.left = constructTree(start, mid - 1);
-        node.right = constructTree(mid + 1, end);
+        node.left = construct(start, mid - 1);
+        node.right = construct(mid + 1, end);
 
         return node;
     }
-
-    return constructTree(0, inOrderArr.length - 1);
 }
 
 const inOrderArray = [40, 20, 50, 10, 60, 30, 70];
-const constructedInOrderTree = constructBinaryTreeFromInOrderArray(inOrderArray);
+const constructedInOrderTree = deserializeInOrder(inOrderArray);
+
 console.log(constructedInOrderTree);
 
 //-------------------------------------------------PostOrder Traversal----------------------------------------------
-function postOrderTraversalDFS(root) {
+function travelPostOrderDFS(root) {
     let result = [];
 
     dfs(root);
+
     return result;
 
     function dfs(node) {
@@ -230,11 +259,10 @@ function postOrderTraversalDFS(root) {
     }
 }
 
-function postOrderTraversalBFS(root) {
+function travelPostOrderBFS(root) {
     let current = null,
-        result = [],
-        tempStack = [],
-        stack = [];
+        stack = [],
+        result = [];
 
     if (!root) return result;
 
@@ -243,16 +271,13 @@ function postOrderTraversalBFS(root) {
     while (stack.length > 0) {
         current = stack.pop();
 
-        tempStack.push(current.val);
+        result.push(current.val);
 
         current.left && stack.push(current.left);
         current.right && stack.push(current.right);
     }
 
-    while (tempStack.length > 0) {
-        result.push(tempStack.pop());
-    }
-    return result;
+    return result.reverse();
 }
 
 //         10
@@ -263,33 +288,76 @@ function postOrderTraversalBFS(root) {
 
 // 40 50 20 60 70 30 10
 
-console.log(postOrderTraversalDFS(apple));
-console.log(postOrderTraversalBFS(apple));
+console.log(travelPostOrderDFS(apple));
+console.log(travelPostOrderBFS(apple));
 
-function constructBinaryTreeFromPostOrderArray(postOrderArr) {
-    let index = postOrderArr.length - 1;
+function serializePostOrderDFS(root) {
+    let result = [];
 
-    return constructTree();
+    dfs(root);
 
-    function constructTree() {
+    return result;
+
+    function dfs(node) {
+        if (!node) {
+            result.push(null);
+            return;
+        }
+
+        dfs(node.left);
+        dfs(node.right);
+        result.push(node.val);
+    }
+}
+
+function serializePostOrderBFS(root) {
+    let current = null,
+        stack = [],
+        result = [];
+
+    if (!root) return result;
+
+    stack.push(root);
+
+    while (stack.length > 0) {
+        current = stack.pop();
+
+        result.push(current?.val ?? null);
+        current && stack.push(current.left);
+        current && stack.push(current.right);
+    }
+    return result.reverse();
+}
+
+function deserializePostOrder(arr) {
+    let current,
+        index = arr.length - 1;
+
+    return construct();
+
+    function construct() {
         if (index < 0) {
             return null;
         }
 
-        let value = postOrderArr[index];
+        current = arr[index];
         index--;
-        if (value === null) {
+
+        if (current === null) {
             return null;
         }
 
-        let node = new Node(value);
+        let node = new Node(current);
 
-        node.right = constructTree();
-        node.left = constructTree();
+        node.right = construct();
+        node.left = construct();
 
         return node;
     }
 }
-const postOrderArray = [40, 50, 20, 60, 70, 30, 10];
-const constructedPostOrderTree = constructBinaryTreeFromPostOrderArray(postOrderArray);
+
+const postOrderArray = serializePostOrderDFS(apple);
+const constructedPostOrderTree = deserializePostOrder(postOrderArray);
+
+console.log(postOrderArray);
 console.log(constructedPostOrderTree);
