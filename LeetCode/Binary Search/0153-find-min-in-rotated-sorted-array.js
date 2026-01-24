@@ -16,20 +16,20 @@
  */
 
 var findMin = function (nums) {
-    let l = 0, r = nums.length - 1, m;
+    let l = 0,
+        r = nums.length - 1,
+        m;
 
     while (l <= r) {
         m = Math.floor((l + r) / 2);
 
         if (nums[m - 1] > nums[m] && nums[m] < nums[m + 1]) return nums[m];
 
-        if (nums[m] > nums[r]) l = m + 1;
-        else r = m - 1;
+        nums[m] < nums[r] ? (r = m - 1) : (l = m + 1);
     }
 
     return nums[m];
 };
-
 let nums = [3, 4, 5, 1, 2];
 
 console.log(findMin(nums));
