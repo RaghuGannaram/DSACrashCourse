@@ -61,4 +61,27 @@ var topKFrequent3 = function (nums, k) {
         .map(([n, f]) => n);
 };
 
+var topKFrequent4 = function (nums, k) {
+    const bucket = [],
+        result = [],
+        map = new Map();
+
+    for (let num of nums) {
+        map.set(num, (map.get(num) ?? 0) + 1);
+    }
+
+    for (let [n, f] of map) {
+        if (!bucket[f]) {
+            bucket[f] = [];
+        }
+        bucket[f].push(n);
+    }
+
+    for (let i = bucket.length - 1; i > bucket.length - 1 - k; i--) {
+        result.push(...(bucket[i] ?? []));
+    }
+
+    return result;
+};
+
 console.log(topKFrequent1([7, 1, 2, 7, 1, 3, 7, 4, 2, 7, 2], 2));

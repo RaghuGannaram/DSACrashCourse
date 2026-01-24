@@ -45,8 +45,8 @@ var decode = function (s) {
 
     while (i < s.length) {
         hash = s.indexOf("#", i);
-        len = Number(s.slice(i, hash));
         start = hash + 1;
+        len = Number(s.slice(i, hash));
 
         res.push(s.slice(start, start + len));
 

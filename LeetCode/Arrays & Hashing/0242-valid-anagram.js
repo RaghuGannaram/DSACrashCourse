@@ -123,4 +123,21 @@ var isAnagram6 = function (s, t) {
     return map.size === 0;
 };
 
+var isAnagram7 = function (s, t) {
+    if (s.length !== t.length) return false;
+
+    const alphaCounter = new Array(26).fill(0);
+
+    for (let i = 0; i < s.length; i++) {
+        alphaCounter[s[i].charCodeAt(0) - 97]++;
+        alphaCounter[t[i].charCodeAt(0) - 97]--;
+    }
+
+    for (let count of alphaCounter) {
+        if (count !== 0) return false;
+    }
+
+    return true;
+};
+
 console.log(isAnagram6("rat", "tzr"));
