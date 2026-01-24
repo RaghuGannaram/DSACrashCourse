@@ -5,25 +5,28 @@
  */
 
 var characterReplacement = function (s, k) {
-	let maxFq = 0,
-		l = 0,
-		r = 0,
-		char,
-		map = new Map();
+    let l = 0,
+        r = 0,
+        ch,
+        maxFreq = 0,
+        freqMap = new Map(),
+        res = 0;
 
-	while (r < s.length) {
-		char = s[r];
-		map.set(char, (map.get(char) ?? 0) + 1);
+    while (r < s.length) {
+        ch = s[r];
 
-		maxFq = Math.max(map.get(char), maxFq);
-		if (r - l + 1 - maxFq > k) {
-			map.set(s[l], map.get(s[l]) - 1);
-			l++;
-		}
-		r++;
-	}
-	
-	return r - l;
+        freqMap.set(ch, (freqMap.get(ch) ?? 0) + 1);
+        maxFreq = Math.max(maxFreq, freqMap.get(ch));
+
+        while (r - (l - 1) - maxFreq > k) {
+            freqMap.set(s[l], (freqMap.get(s[l]) ?? 0) - 1);
+            l++;
+        }
+        res = Math.max(res, r - (l - 1));
+        r++;
+    }
+
+    return res;
 };
 
 console.log(characterReplacement("ABAAABAA", 1));
