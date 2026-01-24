@@ -1,0 +1,607 @@
+# Bit Manipulation Fundamentals (JavaScript) — Complete Notes
+
+> A single, well-documented reference for **bit manipulation theory + operators + two’s complement + core tricks + LeetCode patterns** (with examples).  
+> Language focus: **JavaScript (32-bit signed bitwise behavior)**
+
+---
+
+## Table of Contents
+
+1. [Why Bit Manipulation?](#why-bit-manipulation)
+2. [Bits, Binary, and Positions](#bits-binary-and-positions)
+3. [All Bitwise Operators (JS)](#all-bitwise-operators-js)
+4. [Shift Operators: `<<`, `>>`, `>>>` (and why no `<<<`)](#shift-operators--and-why-no-)
+5. [Bit Masks (Set/Clear/Toggle/Test)](#bit-masks-setcleartoggletest)
+6. [Two’s Complement vs One’s Complement](#twos-complement-vs-ones-complement)
+7. [4-bit Signed Two’s Complement Universe (Full Table)](#4-bit-signed-twos-complement-universe-full-table)
+8. [Negative Right Shift: Why `-5 >> 1 === -3`](#negative-right-shift-why--5--1--3)
+9. [Key Identities & Tricks](#key-identities--tricks)
+10. [LeetCode Core Patterns (Blind 75)](#leetcode-core-patterns-blind-75)
+11. [LeetCode 190: Reverse Bits](#leetcode-190-reverse-bits)
+12. [LeetCode 268: Missing Number](#leetcode-268-missing-number)
+13. [LeetCode 371: Sum of Two Integers](#leetcode-371-sum-of-two-integers)
+14. [Common Pitfalls in JavaScript Bitwise](#common-pitfalls-in-javascript-bitwise)
+15. [Quick Cheat Sheet](#quick-cheat-sheet)
+
+---
+
+## Why Bit Manipulation?
+
+Bit manipulation helps you:
+
+- Optimize memory and performance (constant-space tricks)
+- Solve XOR / mask / subset problems cleanly
+- Implement low-level operations (hashing, compression, flags)
+- Master classic interview problems
+
+Many LeetCode problems become easy once you know these patterns.
+
+---
+
+## Bits, Binary, and Positions
+
+A number is stored in **bits** (0/1).  
+Example (4-bit illustration):
+
+```
+binary:  1 0 1 1
+index:   3 2 1 0   (index 0 is the rightmost bit: LSB)
+```
+
+- **LSB** = Least Significant Bit = rightmost bit (index `0`)
+- **MSB** = Most Significant Bit = leftmost bit (highest index)
+
+---
+
+## All Bitwise Operators (JS)
+
+JavaScript bitwise operators work on **32-bit signed integers** (two’s complement).
+
+| Operator | Name                 | Meaning                           |
+| -------: | -------------------- | --------------------------------- |
+|      `&` | AND                  | 1 if both bits are 1              |
+|     `\|` | OR                   | 1 if either bit is 1              |
+|      `^` | XOR                  | 1 if bits differ                  |
+|      `~` | NOT                  | flips all bits                    |
+|     `<<` | Left shift           | shifts left, fills with 0         |
+|     `>>` | Signed right shift   | shifts right, fills with sign bit |
+|    `>>>` | Unsigned right shift | shifts right, fills with 0        |
+
+### AND `&`
+
+```
+  1010
+& 1100
+------
+  1000
+```
+
+### OR `|`
+
+```
+  1010
+| 1100
+------
+  1110
+```
+
+### XOR `^`
+
+```
+  1010
+^ 1100
+------
+  0110
+```
+
+### NOT `~`
+
+Flips every bit:
+
+```
+~00001101 = 11110010
+```
+
+In JS, `~n` has a famous identity:
+
+> **`~n === -(n + 1)`** (because of two’s complement)
+
+Example:
+
+- `~5 = -6`
+- `~0 = -1`
+
+---
+
+## Shift Operators: `<<`, `>>`, `>>>` (and why no `<<<`)
+
+### Left Shift `<<`
+
+Shifts bits left by `k` positions, filling with 0s on the right.
+
+Example:
+
+```
+0001 << 1 = 0010   (1 << 1 = 2)
+```
+
+### Signed Right Shift `>>` (Arithmetic shift)
+
+Shifts right by `k`, filling left with the **sign bit** (MSB).
+
+- If MSB is `0` (positive), fills with `0`
+- If MSB is `1` (negative), fills with `1`
+
+Example (4-bit signed):
+
+```
+1011 >> 1 = 1101
+```
+
+### Unsigned Right Shift `>>>` (Logical shift)
+
+Shifts right by `k`, filling left with `0` always.
+
+Example (4-bit illustration):
+
+```
+1011 >>> 1 = 0101
+```
+
+### Why no `<<<`?
+
+Because **left shift always fills with 0s**.  
+So a “logical left shift” and “signed left shift” are the same operation.
+
+---
+
+## Bit Masks (Set/Clear/Toggle/Test)
+
+### 1) Create a mask for bit `i`
+
+```js
+let mask = 1 << i;
+```
+
+Example: `i = 3` → mask = `1000`
+
+### 2) Test if bit `i` is set
+
+```js
+if (n & (1 << i)) {
+    // bit i is 1
+}
+```
+
+### 3) Set bit `i` (make it 1)
+
+```js
+n = n | (1 << i);
+```
+
+### 4) Clear bit `i` (make it 0)
+
+```js
+n = n & ~(1 << i);
+```
+
+### 5) Toggle bit `i` (flip it)
+
+```js
+n = n ^ (1 << i);
+```
+
+#### Example: Toggle last bit of `1011`
+
+Target bit index = 0 → mask = `1 << 0 = 0001`
+
+```
+1011
+^0001
+----
+1010
+```
+
+---
+
+## Two’s Complement vs One’s Complement
+
+### One’s Complement
+
+Negative number is made by flipping bits.
+
+Example (4-bit):
+
+- `+5 = 0101`
+- `-5 (1’s comp) = 1010`
+
+Problem: **two zeros**
+
+- `+0 = 0000`
+- `-0 = 1111`
+
+### Two’s Complement (used by computers)
+
+Negative number is:
+
+1. flip bits
+2. add 1
+
+Example (4-bit):
+
+- `+5 = 0101`
+- flip → `1010`
+- +1 → `1011`
+
+So:
+
+- `-5 = 1011`
+
+**Only one zero**: `0000`
+
+Range in `n` bits:
+
+- **min** = `-2^(n-1)`
+- **max** = `2^(n-1) - 1`
+
+---
+
+## 4-bit Signed Two’s Complement Universe (Full Table)
+
+4 bits → 16 patterns.
+
+Signed range: **-8 to +7**
+
+| Binary | Signed Value |
+| -----: | -----------: |
+|   0000 |            0 |
+|   0001 |            1 |
+|   0010 |            2 |
+|   0011 |            3 |
+|   0100 |            4 |
+|   0101 |            5 |
+|   0110 |            6 |
+|   0111 |            7 |
+|   1000 |           -8 |
+|   1001 |           -7 |
+|   1010 |           -6 |
+|   1011 |           -5 |
+|   1100 |           -4 |
+|   1101 |           -3 |
+|   1110 |           -2 |
+|   1111 |           -1 |
+
+### Sequential order (binary counting)
+
+Binary still counts normally:
+
+```
+0000, 0001, 0010, ..., 0111, 1000, 1001, ..., 1111
+```
+
+But signed meaning wraps:
+
+```
+0, 1, 2, 3, 4, 5, 6, 7, -8, -7, -6, -5, -4, -3, -2, -1
+```
+
+### Special value: `1000` (-8)
+
+It has no positive counterpart inside 4-bit signed range.
+
+---
+
+## Negative Right Shift: Why `-5 >> 1 === -3`
+
+In 4-bit signed:
+
+- `-5 = 1011`
+
+Signed shift preserves sign bit (fills with `1`):
+
+```
+1011 >> 1 = 1101
+```
+
+`1101` is `-3` in 4-bit two’s complement.
+
+### Important intuition
+
+Arithmetic right shift behaves like:
+
+> `floor(n / 2)` for signed integers
+
+So:
+
+- `-5 / 2 = -2.5`
+- `floor(-2.5) = -3`
+
+That’s why `-5 >> 1 = -3`.
+
+---
+
+## Key Identities & Tricks
+
+### 1) XOR cancellation
+
+- `a ^ a = 0`
+- `a ^ 0 = a`
+- XOR is commutative and associative
+
+Used in:
+
+- Single Number
+- Missing Number
+- Finding duplicates
+
+### 2) Remove lowest set bit
+
+```js
+n = n & (n - 1);
+```
+
+Example:
+
+- `12 = 1100`
+- `12 & 11 = 1100 & 1011 = 1000`
+
+### 3) Extract lowest set bit (lowbit)
+
+```js
+lowbit = n & -n;
+```
+
+This isolates the rightmost `1` bit.
+
+Example:
+
+- `12 = 1100`
+- `-12 = ...0100` (two’s complement)
+- `12 & -12 = 0100 = 4`
+
+### 4) Check power of two
+
+```js
+function isPowerOfTwo(n) {
+    return n > 0 && (n & (n - 1)) === 0;
+}
+```
+
+### 5) Convert to unsigned 32-bit
+
+```js
+n = n >>> 0;
+```
+
+Example:
+
+```js
+-1 >>> 0; // 4294967295
+```
+
+### 6) Difference between these two bit extractions
+
+#### A) Clean 0/1 bit extraction
+
+```js
+let bit = (n >>> i) & 1;
+```
+
+Returns **0 or 1**.
+
+#### B) Mask test extraction
+
+```js
+let bit = n & (1 << i);
+```
+
+Returns **0 or 2^i**.
+
+Use B mainly for boolean check:
+
+```js
+if (n & (1 << i)) { ... }
+```
+
+---
+
+## LeetCode Core Patterns (Blind 75)
+
+### Pattern 1: XOR accumulator
+
+**Single Number**
+
+```js
+let ans = 0;
+for (let x of nums) ans ^= x;
+return ans;
+```
+
+### Pattern 2: Count set bits
+
+**Number of 1 Bits**
+
+```js
+let count = 0;
+while (n !== 0) {
+    n &= n - 1;
+    count++;
+}
+```
+
+### Pattern 3: DP bits count
+
+**Counting Bits**
+
+```js
+ans[i] = ans[i >> 1] + (i & 1);
+```
+
+### Pattern 4: XOR range + array
+
+**Missing Number**
+
+```js
+xor = (0^1^2^...^n) ^ (nums[0]^nums[1]^...)
+```
+
+---
+
+## LeetCode 190: Reverse Bits
+
+### Goal
+
+Reverse all **32 bits** of an unsigned integer.
+
+### Best approach (bit-by-bit build)
+
+```js
+var reverseBits = function (n) {
+    let res = 0;
+
+    for (let i = 0; i < 32; i++) {
+        res = (res << 1) | (n & 1);
+        n = n >>> 1;
+    }
+
+    return res >>> 0;
+};
+```
+
+### Why `>>> 1`?
+
+To shift right without sign extension.
+
+### Why `>>> 0` at return?
+
+To force unsigned 32-bit output.
+
+---
+
+## LeetCode 268: Missing Number
+
+### Idea
+
+XOR everything from `0..n` and XOR all array values.  
+Pairs cancel out, missing remains.
+
+```js
+var missingNumber = function (nums) {
+    let n = nums.length;
+    let xor = 0;
+
+    for (let i = 0; i <= n; i++) xor ^= i;
+    for (let num of nums) xor ^= num;
+
+    return xor;
+};
+```
+
+---
+
+## LeetCode 371: Sum of Two Integers
+
+### Idea
+
+Binary addition = XOR (sum without carry) + carry.
+
+- sum = `a ^ b`
+- carry = `(a & b) << 1`
+
+Repeat until carry becomes 0.
+
+```js
+var getSum = function (a, b) {
+    while (b !== 0) {
+        let carry = (a & b) << 1;
+        a = a ^ b;
+        b = carry;
+    }
+    return a;
+};
+```
+
+---
+
+## Common Pitfalls in JavaScript Bitwise
+
+### 1) JS bitwise uses 32-bit signed integers
+
+Even though JS numbers are 64-bit floating point, bitwise ops convert to 32-bit signed.
+
+### 2) `>>` vs `>>>`
+
+- `>>` preserves sign (fills with 1 for negatives)
+- `>>>` always fills with 0
+
+### 3) Overflow wraps in 32-bit
+
+Example:
+
+```js
+1 << 31; // becomes negative due to sign bit
+```
+
+### 4) Always ensure 32-bit behavior in reverse bits
+
+Use:
+
+```js
+return res >>> 0;
+```
+
+---
+
+## Quick Cheat Sheet
+
+### Basic operations
+
+```js
+n & m; // AND
+n | m; // OR
+n ^ m; // XOR
+~n; // NOT
+```
+
+### Shifts
+
+```js
+n << k; // left shift
+n >> k; // signed right shift
+n >>> k; // unsigned right shift
+```
+
+### Bit masks
+
+```js
+1 <<
+    i(
+        // mask at bit i
+        n & (1 << i),
+    ) !==
+    0; // test bit i
+n | (1 << i); // set bit i
+n & ~(1 << i); // clear bit i
+n ^ (1 << i); // toggle bit i
+```
+
+### Famous tricks
+
+```js
+n & (n - 1); // remove lowest set bit
+n & -n; // isolate lowest set bit
+```
+
+### Power of two
+
+```js
+n > 0 && (n & (n - 1)) === 0;
+```
+
+### Unsigned conversion
+
+```js
+n >>> 0;
+```
+
+---
