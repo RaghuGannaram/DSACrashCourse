@@ -1,23 +1,23 @@
 class TreeNode {
-	constructor(val) {
-		this.val = val;
-		this.left = null;
-		this.right = null;
-	}
+    constructor(val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
 }
 
 function insertLevelOrder(arr, index = 0) {
-	let root = null;
-	if (index < arr.length) {
-		if (arr[index]) {
-			if (arr[index]) {
-				root = new TreeNode(arr[index]);
-				root.left = insertLevelOrder(arr, 2 * index + 1);
-				root.right = insertLevelOrder(arr, 2 * index + 2);
-			}
-		}
-	}
-	return root;
+    let root = null;
+    if (index < arr.length) {
+        if (arr[index]) {
+            if (arr[index]) {
+                root = new TreeNode(arr[index]);
+                root.left = insertLevelOrder(arr, 2 * index + 1);
+                root.right = insertLevelOrder(arr, 2 * index + 2);
+            }
+        }
+    }
+    return root;
 }
 
 /**
@@ -27,21 +27,23 @@ function insertLevelOrder(arr, index = 0) {
  * @return {string}
  */
 var serialize = function (root) {
-	let result = [];
+    let result = [];
 
-	dfs(root);
+    dfs(root);
 
-	return result.join(",");
+    return result.join(",");
 
-	function dfs(root) {
-		if (!root) {
-			result.push("N");
-			return;
-		}
-		result.push(root.val.toString());
-		dfs(root.left);
-		dfs(root.right);
-	}
+    function dfs(root) {
+        if (!root) {
+            result.push("N");
+            return;
+        }
+
+        result.push(root.val.toString());
+
+        dfs(root.left);
+        dfs(root.right);
+    }
 };
 
 /**
@@ -51,20 +53,30 @@ var serialize = function (root) {
  * @return {TreeNode}
  */
 var deserialize = function (data) {
-	let preorder = data.split(",");
+    const list = data.split(",");
+    let index = 0;
 
-	return dfs();
+    return dfs();
 
-	function dfs() {
-		if (preorder[0] === "N") {
-			preorder.shift();
-			return null;
-		}
-		let root = new TreeNode(Number(preorder.shift()));
-		root.left = dfs();
-		root.right = dfs();
-		return root;
-	}
+    function dfs() {
+        if (data.length <= index) {
+            return null;
+        }
+
+        const val = list[index];
+        index++;
+
+        if (val === "N") {
+            return null;
+        }
+
+        const node = new TreeNode(Number(val));
+
+        node.left = dfs();
+        node.right = dfs();
+
+        return node;
+    }
 };
 
 let root = insertLevelOrder([1, 2, 3, null, null, 4, 5]);
