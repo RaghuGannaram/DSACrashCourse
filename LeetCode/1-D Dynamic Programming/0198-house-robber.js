@@ -16,18 +16,25 @@
 
 //Approach 1: Recursion with Memoization
 var rob1 = function (nums) {
+    if (nums.length === 1) return nums[0];
+
     const cache = new Map();
 
-    return dp(0);
+    const excludeLast = dfs(nums.length - 2, nums.slice(0, -1));
 
-    function dp(i) {
-        if (i >= nums.length) return 0;
+    cache.clear();
+    const excludeFirst = dfs(nums.length - 2, nums.slice(1));
 
-        if (cache.has(i)) return cache.get(i);
+    return Math.max(excludeLast, excludeFirst);
 
-        const computation = Math.max(nums[i] + dp(i + 2), dp(i + 1));
+    function dfs(index, nums) {
+        if (index < 0) return 0;
 
-        cache.set(i, computation);
+        if (cache.has(index)) return cache.get(index);
+
+        const computation = Math.max(dfs(index - 2, nums) + nums[index], dfs(index - 1, nums));
+
+        cache.set(index, computation);
 
         return computation;
     }
@@ -46,16 +53,15 @@ var rob2 = function (nums) {
 
 //Approach 3: Iteration with Space Optimization
 var rob3 = function (nums) {
-    let secondLast, last, current;
+    let secondLast = null,
+        last = null,
+        current = null;
 
-    secondLast = nums[0];
-    last = Math.max(nums[0], nums[1] ?? 0);
-
-    for (let i = 2; i < nums.length; i++) {
-        current = Math.max(secondLast + nums[i], last);
+    for (let i = 0; i < nums.length; i++) {
+        current = Math.max((secondLast ?? 0) + nums[i], last ?? 0);
         secondLast = last;
         last = current;
     }
 
-    return last;
+    return current;
 };

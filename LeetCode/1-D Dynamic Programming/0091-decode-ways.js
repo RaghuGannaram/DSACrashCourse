@@ -16,22 +16,28 @@
  */
 
 var numDecodings = function (s) {
-    if (s[0] === "0") return 0;
+    const dp = new Array(s.length).fill(0);
 
-    let dp = new Array(s.length).fill(0);
+    if (s[0] === "0") return 0;
 
     dp[0] = 1;
 
-    for (let pair, i = 1; i < s.length; i++) {
-        if (s[i] !== "0") {
+    for (let i = 1; i < s.length; i++) {
+        const single = parseInt(s[i]);
+        const double = parseInt(s.slice(i - 1, i + 1));
+
+        if (1 <= single && single <= 9) {
             dp[i] += dp[i - 1];
         }
 
-        pair = parseInt(s.slice(i - 1, i + 1));
-        if (10 <= pair && pair <= 26) {
+        if (10 <= double && double <= 26) {
             dp[i] += dp[i - 2] ?? 1;
         }
     }
 
     return dp.at(-1);
 };
+
+// console.log(numDecodings("2906"));
+// console.log(numDecodings("1210"));
+console.log(numDecodings("1212"));

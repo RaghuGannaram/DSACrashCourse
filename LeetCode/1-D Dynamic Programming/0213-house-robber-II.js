@@ -16,9 +16,9 @@
 
 // Approach 1: Recursion with Memoization (Time Limit Exceeded)
 var rob1 = function (nums) {
-    const cache = new Map();
-
     if (nums.length === 1) return nums[0];
+
+    const cache = new Map();
 
     return Math.max(dp(0, nums.slice(0, -1)), dp(0, nums.slice(1)));
 

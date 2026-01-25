@@ -20,16 +20,16 @@
 var climbStairs1 = function (n) {
     const cache = new Map();
 
-    return dp(n);
+    return dfs(n);
 
-    function dp(s) {
-        if (s <= 1) return 1;
+    function dfs(step) {
+        if (step <= 2) return step;
 
-        if (cache.has(s)) return cache.get(s);
+        if (cache.has(step)) return cache.get(step);
 
-        const computation = dp(s - 1) + dp(s - 2);
+        const computation = dfs(step - 1) + dfs(step - 2);
 
-        cache.set(s, computation);
+        cache.set(step, computation);
 
         return computation;
     }

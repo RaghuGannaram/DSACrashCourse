@@ -30,7 +30,7 @@ var coinChange1 = function (coins, amount) {
             ...coins.map((coin) => {
                 const sub = dp(due - coin);
                 return sub === Number.MAX_SAFE_INTEGER ? sub : sub + 1;
-            })
+            }),
         );
 
         cache.set(due, computation);
@@ -39,18 +39,18 @@ var coinChange1 = function (coins, amount) {
     }
 };
 
+//Approach 2: Iteration with Tabulation
 var coinChange2 = function (coins, amount) {
     const dp = new Array(amount + 1).fill(Number.MAX_SAFE_INTEGER);
-
     dp[0] = 0;
 
-    for (let a = 1; a <= amount; a++) {
+    for (let currentAmount = 0; currentAmount <= amount; currentAmount++) {
         for (let coin of coins) {
-            if (a - coin >= 0) {
-                dp[a] = Math.min(dp[a], dp[a - coin] + 1);
+            if (currentAmount - coin >= 0) {
+                dp[currentAmount] = Math.min(dp[currentAmount], 1 + dp[currentAmount - coin]);
             }
         }
     }
 
-    return dp[amount] === Number.MAX_SAFE_INTEGER ? -1 : dp[amount];
+    return dp.at(-1) === Number.MAX_SAFE_INTEGER ? -1 : dp.at(-1);
 };

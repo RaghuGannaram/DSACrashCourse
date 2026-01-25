@@ -30,7 +30,6 @@
 
 */
 
-//Approach 1: Iteration with tabulation
 var lengthOfLIS = function (nums) {
     const dp = new Array(nums.length).fill(1);
 
