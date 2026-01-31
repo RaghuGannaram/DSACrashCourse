@@ -11,7 +11,28 @@
     @return {number[][]}
  */
 
-var subsets = function (nums) {
+var subsets_1 = function (nums) {
+    const result = [];
+
+    backtrack(0, []);
+
+    return result;
+
+    function backtrack(i, subset) {
+        if (i === nums.length) {
+            result.push([...subset]);
+            return;
+        }
+
+        subset.push(nums[i]);
+        backtrack(i + 1, subset);
+
+        subset.pop();
+        backtrack(i + 1, subset);
+    }
+};
+
+var subsets_2 = function (nums) {
     let res = [];
 
     backtrack(0, []);
@@ -23,11 +44,14 @@ var subsets = function (nums) {
             res.push([...cur]);
             return;
         }
+
+        backtrack(i + 1, cur);
+
         cur.push(nums[i]);
+
         backtrack(i + 1, cur);
 
         cur.pop();
-        backtrack(i + 1, cur);
     }
 };
 

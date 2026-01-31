@@ -14,25 +14,27 @@
  */
 
 var combinationSum = function (candidates, target) {
-    let res = [];
+    const result = [];
 
     backtrack(0, [], 0);
 
-    return res;
+    return result;
 
-    function backtrack(i, cur, sum) {
+    function backtrack(i, comb, sum) {
         if (sum === target) {
-            res.push([...cur]);
+            result.push([...comb]);
             return;
         }
 
-        if (sum > target || i === candidates.length) return;
+        if (candidates.length <= i || target < sum) {
+            return;
+        }
 
-        cur.push(candidates[i]);
-        backtrack(i, cur, sum + candidates[i]);
+        comb.push(candidates[i]);
+        backtrack(i, comb, sum + candidates[i]);
 
-        cur.pop();
-        backtrack(i + 1, cur, sum);
+        comb.pop();
+        backtrack(i + 1, comb, sum);
     }
 };
 

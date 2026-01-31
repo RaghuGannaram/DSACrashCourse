@@ -25,13 +25,12 @@ var solveNQueens = function (n) {
 
     function backtrack(r) {
         if (r === n) {
-            res.push(board.map(row => row.join("")));
+            res.push(board.map((row) => row.join("")));
             return;
         }
 
         for (let c = 0; c < n; c++) {
-            if (colSet.has(c) || posDiagSet.has(r + c) || negDiagSet.has(r - c))
-                continue;
+            if (colSet.has(c) || posDiagSet.has(r + c) || negDiagSet.has(r - c)) continue;
 
             colSet.add(c);
             posDiagSet.add(r + c);
@@ -46,9 +45,8 @@ var solveNQueens = function (n) {
             board[r][c] = ".";
         }
     }
-
 };
 
 let n = 4;
 
-console.log(solveNQueens(n));   // [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+console.log(solveNQueens(n)); // [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]

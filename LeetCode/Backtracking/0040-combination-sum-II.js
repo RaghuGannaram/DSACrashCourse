@@ -14,33 +14,35 @@
  */
 
 var combinationSum2 = function (candidates, target) {
-    let res = [];
+    const result = [];
+
     candidates.sort((a, b) => a - b);
 
     backtrack(0, [], 0);
 
-    return res;
+    return result;
 
-    function backtrack(i, cur, sum) {
+    function backtrack(i, comb, sum) {
         if (sum === target) {
-            res.push([...cur]);
+            result.push([...comb]);
             return;
         }
 
-        if (sum > target || i === candidates.length) return;
+        if (candidates.length <= i || target < sum) {
+            return;
+        }
 
+        comb.push(candidates[i]);
+        backtrack(i + 1, comb, sum + candidates[i]);
 
-        cur.push(candidates[i]);
-        backtrack(i + 1, cur, sum + candidates[i]);
+        while (i + 1 < candidates.length && candidates[i] === candidates[i + 1]) i++;
 
-        while (i < candidates.length && candidates[i] === candidates[i + 1]) i++;
-
-        cur.pop();
-        backtrack(i + 1, cur, sum);
+        comb.pop();
+        backtrack(i + 1, comb, sum);
     }
-
 };
 
-let candidates = [10, 1, 2, 7, 6, 1, 5], target = 8;
+let candidates = [10, 1, 2, 7, 6, 1, 5],
+    target = 8;
 
 console.log(combinationSum2(candidates, target)); // [[1,1,6],[1,2,5],[1,7],[2,6]]

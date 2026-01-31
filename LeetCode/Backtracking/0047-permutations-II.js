@@ -11,30 +11,33 @@
  */
 
 var permuteUnique1 = function (nums) {
-    let res = [],
-        visited = new Set();
+    const result = [],
+        picked = new Set();
+
     nums.sort((a, b) => a - b);
 
-    backtrack([]);
+    backtrack(0, []);
 
-    return res;
+    return result;
 
-    function backtrack(cur) {
-        if (cur.length === nums.length) {
-            res.push([...cur]);
+    function backtrack(pos, perm) {
+        if (pos === nums.length) {
+            result.push([...perm]);
             return;
         }
 
         for (let i = 0; i < nums.length; i++) {
-            if (!visited.has(i)) {
-                if (i > 0 && nums[i] === nums[i - 1] && !visited.has(i - 1)) continue;
+            if (picked.has(i)) continue;
 
-                visited.add(i);
-                cur.push(nums[i]);
-                backtrack(cur);
-                cur.pop();
-                visited.delete(i);
-            }
+            if (0 < i && nums[i - 1] === nums[i] && !picked.has(i - 1)) continue;
+
+            picked.add(i);
+            perm.push(nums[i]);
+
+            backtrack(pos + 1, perm);
+
+            picked.delete(i);
+            perm.pop();
         }
     }
 };
